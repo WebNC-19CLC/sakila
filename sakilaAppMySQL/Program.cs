@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using sakilaAppMySQL.Infrastructure.Context;
-using sakilaAppMySQL.Infrastructure.Domain.Entities;
 using sakilaAppMySQL.Infrastructure.Domain.Object.Configuration;
 using sakilaAppMySQL.Infrastructure.Services;
+using sakilaAppMySQL.Middlewares;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,13 @@ builder.Services.Configure<AppSettings>(appSettingsSection);
 var appSettings = appSettingsSection.Get<AppSettings>();
 
 //SERVICES
-builder.Services.AddScoped<ActorService, ActorService>();
+builder.Services.AddScoped<IActorService, ActorService>();
+builder.Services.AddScoped<IFilmService, FilmService>();
+
+builder.Services.AddAutoMapper((provider, opt) =>
+{
+  opt.ConstructServicesUsing(t => ActivatorUtilities.CreateInstance(provider, t));
+}, Assembly.GetAssembly(typeof(Program)));
 //DBContext
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
 builder.Services.AddDbContext<sakilaContext>(opt => opt.UseMySql(appSettings.SakilaConnectionString, serverVersion));
@@ -37,6 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 

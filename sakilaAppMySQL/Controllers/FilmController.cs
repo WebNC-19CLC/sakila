@@ -8,24 +8,25 @@ namespace sakilaAppMySQL.Controllers
 {
   [ApiController]
   [Route("[controller]")]
-  public class ActorController : ControllerBase
+  public class FilmController : ControllerBase
   {
     private readonly IMapper _mapper;
-    private readonly IActorService _service;
-    public ActorController(IMapper mapper, IActorService service)
+    private readonly IFilmService _service;
+    public FilmController(IMapper mapper, IFilmService service)
     {
       _mapper = mapper;
       _service = service;
     }
     [HttpGet()]
-    public IEnumerable<ActorDto> Get()
+    public IEnumerable<FilmDto> Get()
     {
-      return _mapper.Map<IEnumerable<Actor>, IEnumerable<ActorDto>>(_service.GetAll());
+      return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.GetAll());
     }
 
     [HttpPost()]
-    public ActorDto CreateActor([FromBody] CreateActorDto actor) {
-      return _service.Create(actor);
+    public FilmDto CreateFilm([FromBody] CreateFilmDto film)
+    {
+      return _mapper.Map<Film, FilmDto>(_service.CreateFilm(film));
     }
   }
 }
