@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using sakilaAppMySQL.Dtos;
+using sakilaAppMySQL.Dtos.FilmsDto;
 using sakilaAppMySQL.Infrastructure.Context;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
 using sakilaAppMySQL.Infrastructure.Exceptions;
@@ -25,6 +25,15 @@ namespace sakilaAppMySQL.Infrastructure.Services
         .Include(x => x.Inventories).ThenInclude(x => x.Store).ToList();
     }
 
+    public IEnumerable<Film> SearchByPage(SearchFilmFilterDto filter)
+    {
+      return _context.Films.Include(x => x.FilmActors).ThenInclude(x => x.Actor)
+       .Include(x => x.Language)
+       .Include(x => x.OriginalLanguage)
+       .Include(x => x.FilmCategories).ThenInclude(x => x.Category)
+       .Include(x => x.Inventories).ThenInclude(x => x.Store).Skip(filter.NumPerPage * (filter.PageNum - 1)).Take(filter.NumPerPage).ToList();
+    }
+
     public Film CreateFilm(CreateFilmDto film)
     {
 
@@ -39,25 +48,14 @@ namespace sakilaAppMySQL.Infrastructure.Services
         throw new NotFoundException<Language>(film.LanguageId);
       }
 
-      var actors = _context.Actors.Where(x => film.FilmActorIds.Contains(x.ActorId)).ToList();
-      var categories = _context.Categories.Where(x => film.FilmCategoriesIds.Contains(x.CategoryId)).ToList();
-
-      var filmactors = new List<FilmActor>();
-      foreach (var actor in actors) {
-        filmactors.Add(new FilmActor { Film = filmToSave, Actor = actor, LastUpdate = DateTimeNow });
-      }
-
-      var filmCategories = new List<FilmCategory>();
-      foreach (var category in categories)
-      {
-        filmCategories.Add(new FilmCategory { Film = filmToSave, Category = category, LastUpdate = DateTimeNow });
-      }
+      var actors = _context.Actors.Where(x => film.FilmActorIds.Contains(x.ActorId)).Select(x => new FilmActor { Film = filmToSave, Actor = x, LastUpdate = DateTimeNow }).ToList();
+      var categories = _context.Categories.Where(x => film.FilmCategoriesIds.Contains(x.CategoryId)).Select(x => new FilmCategory { Film = filmToSave, Category = x, LastUpdate = DateTimeNow }).ToList();
 
       filmToSave.LastUpdate = DateTimeNow;
       filmToSave.Language = language;
       filmToSave.OriginalLanguage = originalLanguage;
-      filmToSave.FilmActors = filmactors;
-      filmToSave.FilmCategories = filmCategories;
+      filmToSave.FilmActors = actors;
+      filmToSave.FilmCategories = categories;
 
       _context.Add(filmToSave);
       _context.SaveChanges();

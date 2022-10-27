@@ -1,4 +1,4 @@
-﻿using sakilaAppMySQL.Dtos;
+﻿using sakilaAppMySQL.Dtos.FilmsDto;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
 
 namespace sakilaAppMySQL.Infrastructure.MappingProfiles

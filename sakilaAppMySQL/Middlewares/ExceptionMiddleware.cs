@@ -64,7 +64,7 @@ namespace sakilaAppMySQL.Middlewares
 
         default:
           context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-          message = "ServerError";
+          message = exception.InnerException!.Message;
           break;
       }
 

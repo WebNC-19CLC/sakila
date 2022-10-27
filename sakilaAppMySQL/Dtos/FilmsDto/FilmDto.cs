@@ -1,4 +1,4 @@
-﻿namespace sakilaAppMySQL.Dtos
+﻿namespace sakilaAppMySQL.Dtos.FilmsDto
 {
   public class FilmDto
   {

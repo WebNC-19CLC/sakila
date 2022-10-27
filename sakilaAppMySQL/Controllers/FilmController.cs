@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sakilaAppMySQL.Dtos;
 using AutoMapper;
 using sakilaAppMySQL.Infrastructure.Services;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
+using sakilaAppMySQL.Dtos.FilmsDto;
 
 namespace sakilaAppMySQL.Controllers
 {
@@ -21,6 +21,12 @@ namespace sakilaAppMySQL.Controllers
     public IEnumerable<FilmDto> Get()
     {
       return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.GetAll());
+    }
+
+    [HttpPost("searchByPage")]
+    public IEnumerable<FilmDto> SearchByPage([FromBody] SearchFilmFilterDto filter)
+    {
+      return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.SearchByPage(filter));
     }
 
     [HttpPost()]

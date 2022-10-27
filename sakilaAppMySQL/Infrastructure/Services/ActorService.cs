@@ -1,6 +1,6 @@
 ﻿using sakilaAppMySQL.Infrastructure.Domain.Entities;
 using sakilaAppMySQL.Infrastructure.Context;
-using sakilaAppMySQL.Dtos;
+using sakilaAppMySQL.Dtos.ActorsDto;
 
 namespace sakilaAppMySQL.Infrastructure.Services
 {

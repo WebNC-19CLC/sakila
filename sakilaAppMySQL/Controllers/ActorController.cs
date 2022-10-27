@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sakilaAppMySQL.Dtos;
 using AutoMapper;
 using sakilaAppMySQL.Infrastructure.Services;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
+using sakilaAppMySQL.Dtos.ActorsDto;
 
 namespace sakilaAppMySQL.Controllers
 {

@@ -1,4 +1,4 @@
-﻿using sakilaAppMySQL.Dtos;
+﻿using sakilaAppMySQL.Dtos.ActorsDto;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
 
 namespace sakilaAppMySQL.Infrastructure.Services

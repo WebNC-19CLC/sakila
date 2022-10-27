@@ -1,4 +1,4 @@
-﻿namespace sakilaAppMySQL.Dtos
+﻿namespace sakilaAppMySQL.Dtos.ActorsDto
 {
   public class ActorDto
   {

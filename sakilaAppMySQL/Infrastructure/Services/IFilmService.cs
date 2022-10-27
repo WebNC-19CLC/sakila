@@ -1,4 +1,4 @@
-﻿using sakilaAppMySQL.Dtos;
+﻿using sakilaAppMySQL.Dtos.FilmsDto;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
 
 namespace sakilaAppMySQL.Infrastructure.Services
@@ -7,5 +7,6 @@ namespace sakilaAppMySQL.Infrastructure.Services
   {
     IEnumerable<Film> GetAll();
     Film CreateFilm(CreateFilmDto film);
+    IEnumerable<Film> SearchByPage(SearchFilmFilterDto filter);
   }
 }
