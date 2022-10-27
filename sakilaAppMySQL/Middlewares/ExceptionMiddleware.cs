@@ -70,7 +70,7 @@ namespace sakilaAppMySQL.Middlewares
 
       if (exception is BusinessException businessException)
       {
-        info = businessException.Info;
+        info = businessException.Message;
       }
 
       var response = context.Response;
