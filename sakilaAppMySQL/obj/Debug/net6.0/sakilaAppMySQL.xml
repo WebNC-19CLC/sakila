@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>sakilaAppMySQL</name>
+    </assembly>
+    <members>
+        <member name="M:sakilaAppMySQL.Controllers.ActorController.Get">
+            <summary>
+            Get all actors
+            </summary>
+            <returns>A list of Actors</returns>
+            <response code="201">Returns the newly created item</response>
+        </member>
+    </members>
+</doc>

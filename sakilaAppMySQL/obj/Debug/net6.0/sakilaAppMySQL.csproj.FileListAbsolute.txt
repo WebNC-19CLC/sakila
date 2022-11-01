@@ -38,3 +38,9 @@ C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\DataAnnotationsExtensions.dll
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\sakilaAppMySQL.xml
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\obj\Debug\net6.0\sakilaAppMySQL.xml
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\Scrutor.dll
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\MAIA\source\repos\sakila\sakilaAppMySQL\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll

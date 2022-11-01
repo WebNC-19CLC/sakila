@@ -6,7 +6,7 @@ namespace sakilaAppMySQL.Dtos.FilmsDto
   {
     [Required]
     [Range(0,30)]
-    public int NumPerPage { get; set; } = 10;
+    public int NumPerPage { get; set; } = 10; 
     [Required]
     [Range(0, int.MaxValue)]
     public int PageNum { get; set; } = 1;
