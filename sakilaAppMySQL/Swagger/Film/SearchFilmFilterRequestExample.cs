@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace sakilaAppMySQL.Swagger.Film
 {
-  public class SearchFilmFilterRequestExample : IMultipleExamplesProvider<SearchFilmFilterDto>
+  public class SearchFilterExample : IMultipleExamplesProvider<SearchFilmFilterDto>
   {
     public IEnumerable<SwaggerExample<SearchFilmFilterDto>> GetExamples()
     {

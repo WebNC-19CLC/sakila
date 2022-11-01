@@ -62,5 +62,31 @@ namespace sakilaAppMySQL.Infrastructure.Services
 
       return filmToSave;
     }
+
+    public void Delete(int Id)
+    {
+      var film = _context.Films.SingleOrDefault(x => x.FilmId == Id);
+      if (film == null)
+      {
+        throw new NotFoundException<Film>(Id);
+      }
+      _context.Remove(film);
+      _context.SaveChanges();
+    }
+
+    public Film GetOne(int Id)
+    {
+      var film = _context.Films.Include(x => x.FilmActors).ThenInclude(x => x.Actor)
+        .Include(x => x.Language)
+        .Include(x => x.OriginalLanguage)
+        .Include(x => x.FilmCategories).ThenInclude(x => x.Category)
+        .Include(x => x.Inventories).ThenInclude(x => x.Store).SingleOrDefault(x => x.FilmId == Id);
+      if(film == null)
+      {
+        throw new NotFoundException<Film>(Id);
+      }
+
+      return film;
+    }
   }
 }

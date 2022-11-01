@@ -28,7 +28,7 @@ namespace sakilaAppMySQL.Controllers
 
     [HttpPost("searchByPage")]
     [SwaggerResponseExample(200, typeof(FilmsExample))]
-    [SwaggerRequestExample(typeof(SearchFilmFilterDto), typeof(SearchFilmFilterRequestExample))]
+    [SwaggerRequestExample(typeof(SearchFilmFilterDto), typeof(SearchFilterExample))]
     public IEnumerable<FilmDto> SearchByPage([FromBody] SearchFilmFilterDto filter)
     {
       return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.SearchByPage(filter));
@@ -40,6 +40,25 @@ namespace sakilaAppMySQL.Controllers
     public FilmDto CreateFilm([FromBody] CreateFilmDto film)
     {
       return _mapper.Map<Film, FilmDto>(_service.CreateFilm(film));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <response code="404">Film not found</response>
+    [HttpGet("{Id}")]
+    [SwaggerResponseExample(200, typeof(FilmExample))]
+    public FilmDto GetOne([FromRoute] int Id)
+    {
+      return _mapper.Map<Film, FilmDto>(_service.GetOne(Id));
+    }
+
+
+    /// <response code="404">Film not found</response>
+    [HttpDelete()]
+    public void Delte(int Id)
+    {
+      _service.Delete(Id);
     }
   }
 }

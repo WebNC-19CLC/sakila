@@ -8,5 +8,7 @@ namespace sakilaAppMySQL.Infrastructure.Services
     IEnumerable<Film> GetAll();
     Film CreateFilm(CreateFilmDto film);
     IEnumerable<Film> SearchByPage(SearchFilmFilterDto filter);
+    void Delete(int Id);
+    Film GetOne(int Id);
   }
 }

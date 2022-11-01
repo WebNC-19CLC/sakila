@@ -5,6 +5,8 @@ using sakilaAppMySQL.Infrastructure.Domain.Entities;
 using sakilaAppMySQL.Dtos.ActorsDto;
 using Swashbuckle.AspNetCore.Filters;
 using sakilaAppMySQL.Swagger.Actor;
+using sakilaAppMySQL.Dtos.Common;
+using sakilaAppMySQL.Swagger.Common;
 
 namespace sakilaAppMySQL.Controllers
 {
@@ -23,7 +25,7 @@ namespace sakilaAppMySQL.Controllers
     /// Get all actors
     /// </summary>
     /// <returns>A list of Actors</returns>
-    /// <response code="201">Returns the newly created item</response>
+    /// <response code="400">Error</response>
     [HttpGet()]
     [SwaggerResponseExample(200, typeof(ActorsExample))]
     public IEnumerable<ActorDto> Get()
@@ -36,6 +38,31 @@ namespace sakilaAppMySQL.Controllers
     [SwaggerRequestExample(typeof(CreateActorDto), typeof(CreateActorRequestExample))]
     public ActorDto CreateActor([FromBody] CreateActorDto actor) {
       return _service.Create(actor);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <response code="404">Actor not found</response>
+    [HttpGet("{Id}")]
+    [SwaggerResponseExample(200, typeof(ActorExample))]
+    public ActorDto GetOne([FromRoute] int Id)
+    {
+      return _mapper.Map<Actor, ActorDto>(_service.GetOne(Id));
+    }
+
+    [HttpPost("searchByPage")]
+    [SwaggerResponseExample(200, typeof(ActorExample))]
+    [SwaggerRequestExample(typeof(SearchFilterDto), typeof(SearchFilterExample))]
+    public IEnumerable<ActorDto> SearchByPage([FromBody] SearchFilterDto filter)
+    {
+      return _mapper.Map<IEnumerable<Actor>, IEnumerable<ActorDto>>(_service.SearchByPage(filter));
+    }
+
+    /// <response code="404">Actor not found</response>
+    [HttpDelete()]
+    public void Delte(int Id) { 
+      _service.Delete(Id);
     }
   }
 }
