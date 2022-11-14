@@ -17,6 +17,17 @@ namespace sakilaAppMySQL.Swagger.Actor
           LastUpdate = DateTime.Now
         }
       );
+
+      yield return SwaggerExample.Create(
+       "Example 2",
+       new ActorDto()
+       {
+         ActorId = 2,
+         FirstName = "Anh",
+         LastName = "Hoang",
+         LastUpdate = DateTime.Now
+       }
+     );
     }
   }
 }

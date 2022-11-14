@@ -5,9 +5,11 @@ using sakilaAppMySQL.Infrastructure.Domain.Entities;
 using sakilaAppMySQL.Dtos.FilmsDto;
 using Swashbuckle.AspNetCore.Filters;
 using sakilaAppMySQL.Swagger.Film;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sakilaAppMySQL.Controllers
 {
+  [Authorize]
   [ApiController]
   [Route("[controller]")]
   public class FilmController : ControllerBase
@@ -33,6 +35,7 @@ namespace sakilaAppMySQL.Controllers
     {
       return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.SearchByPage(filter));
     }
+   
 
     [HttpPost()]
     [SwaggerResponseExample(200, typeof(FilmExample))]

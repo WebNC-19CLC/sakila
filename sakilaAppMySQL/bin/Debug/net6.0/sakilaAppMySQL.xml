@@ -9,15 +9,34 @@
             Get all actors
             </summary>
             <returns>A list of Actors</returns>
-            <response code="400">Error</response>
+            <response code="400">Bad request</response>
+        </member>
+        <member name="M:sakilaAppMySQL.Controllers.ActorController.CreateActor(sakilaAppMySQL.Dtos.ActorsDto.CreateActorDto)">
+            <summary>
+            Create an actor
+            </summary>
+            <param name="actor"></param>
+            <returns></returns>
         </member>
         <member name="M:sakilaAppMySQL.Controllers.ActorController.GetOne(System.Int32)">
             <summary>
-            
+            Get one actor
             </summary>
+            <param name="Id">Id of an actor</param>
             <response code="404">Actor not found</response>
         </member>
+        <member name="M:sakilaAppMySQL.Controllers.ActorController.SearchByPage(sakilaAppMySQL.Dtos.Common.SearchFilterDto)">
+            <summary>
+            Get actor by page
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
         <member name="M:sakilaAppMySQL.Controllers.ActorController.Delte(System.Int32)">
+            <summary>
+            Delete an actor
+            </summary>
+            <param name="Id">Id of an actor</param>
             <response code="404">Actor not found</response>
         </member>
         <member name="M:sakilaAppMySQL.Controllers.FilmController.GetOne(System.Int32)">
@@ -28,6 +47,46 @@
         </member>
         <member name="M:sakilaAppMySQL.Controllers.FilmController.Delte(System.Int32)">
             <response code="404">Film not found</response>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.ActorsDto.ActorDto.ActorId">
+            <summary>
+            Actor's id
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.ActorsDto.ActorDto.FirstName">
+            <summary>
+            First name of actor
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.ActorsDto.ActorDto.LastName">
+            <summary>
+            Last name of actor
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.ActorsDto.ActorDto.LastUpdate">
+            <summary>
+            Last time the actor info is updated
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.Common.SearchFilterDto.NumPerPage">
+            <summary>
+            Number per page
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.Common.SearchFilterDto.PageNum">
+            <summary>
+            Page number
+            </summary>
+        </member>
+        <member name="T:sakilaAppMySQL.Dtos.FilmsDto.CreateFilmDto">
+            <summary>
+            An object to create film
+            </summary>
+        </member>
+        <member name="P:sakilaAppMySQL.Dtos.FilmsDto.CreateFilmDto.Title">
+            <summary>
+            Film title
+            </summary>
         </member>
     </members>
 </doc>

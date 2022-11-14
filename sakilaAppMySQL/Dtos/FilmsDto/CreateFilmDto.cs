@@ -1,7 +1,13 @@
 ﻿namespace sakilaAppMySQL.Dtos.FilmsDto
 {
+  /// <summary>
+  /// An object to create film
+  /// </summary>
   public class CreateFilmDto
   {
+    /// <summary>
+    /// Film title
+    /// </summary>
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public short? ReleaseYear { get; set; }

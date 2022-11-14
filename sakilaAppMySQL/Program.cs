@@ -1,11 +1,16 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using sakilaAppMySQL.Infrastructure.Context;
+using sakilaAppMySQL.Infrastructure.Domain.Entities.Authentication;
 using sakilaAppMySQL.Infrastructure.Domain.Object.Configuration;
 using sakilaAppMySQL.Infrastructure.Services;
 using sakilaAppMySQL.Middlewares;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 // SETTINGS
 var appSettingsSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.Configure<AppSettings>(appSettingsSection);
+ConfigurationManager configuration = builder.Configuration;
 var appSettings = appSettingsSection.Get<AppSettings>();
 
 //SERVICES
@@ -27,6 +33,37 @@ builder.Services.AddAutoMapper((provider, opt) =>
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
 builder.Services.AddDbContext<sakilaContext>(opt => opt.UseMySql(appSettings.SakilaConnectionString, serverVersion));
 
+// For Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<sakilaContext>()
+    .AddDefaultTokenProviders();
+
+// Adding Authentication
+builder.Services.AddAuthentication(options =>
+{
+  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+
+// Adding Jwt Bearer
+.AddJwtBearer(options =>
+{
+  options.SaveToken = true;
+  options.RequireHttpsMetadata = false;
+  options.TokenValidationParameters = new TokenValidationParameters()
+  {
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = true,
+    ValidateIssuerSigningKey = true,
+    ClockSkew = TimeSpan.Zero,
+
+    ValidAudience = configuration["JWT:ValidAudience"],
+    ValidIssuer = configuration["JWT:ValidIssuer"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+  };
+});
 
 
 builder.Services.AddControllers();
@@ -34,10 +71,34 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-  c.SwaggerDoc("v1", new OpenApiInfo { Title = "SakilaAPI", Version = "v1" });
+  c.SwaggerDoc("v1", new OpenApiInfo { Title = "SakilaAPI", Version = "v1.0.1" });
   c.ExampleFilters();
   var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
   c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+  c.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+  {
+    Name = "Authorization",
+    Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+    In = ParameterLocation.Header,
+    Type = SecuritySchemeType.ApiKey,
+    Scheme = "Bearer"
+  });
+  c.AddSecurityRequirement(new OpenApiSecurityRequirement
+{
+    {
+        new OpenApiSecurityScheme
+        {
+            Name = "Bearer",
+            In = ParameterLocation.Header,
+            Reference = new OpenApiReference
+            {
+                Id = "Bearer",
+                Type = ReferenceType.SecurityScheme
+            }
+        },
+        new List<string>()
+    }
+});
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());

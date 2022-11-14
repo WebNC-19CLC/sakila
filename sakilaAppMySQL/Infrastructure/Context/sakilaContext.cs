@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using sakilaAppMySQL.Infrastructure.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using sakilaAppMySQL.Infrastructure.Domain.Entities.Authentication;
 
 namespace sakilaAppMySQL.Infrastructure.Context
 {
-  public partial class sakilaContext : DbContext
+  public partial class sakilaContext :  IdentityDbContext<ApplicationUser>
   {
     public sakilaContext()
     {
@@ -862,6 +865,8 @@ namespace sakilaAppMySQL.Infrastructure.Context
                   .OnDelete(DeleteBehavior.ClientSetNull)
                   .HasConstraintName("fk_staff_store");
       });
+
+      base.OnModelCreating(modelBuilder);
 
       OnModelCreatingPartial(modelBuilder);
     }
