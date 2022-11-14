@@ -80,7 +80,7 @@ builder.Services.AddSwaggerGen(c =>
     Name = "Authorization",
     Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
     In = ParameterLocation.Header,
-    Type = SecuritySchemeType.ApiKey,
+    Type = SecuritySchemeType.Http,
     Scheme = "Bearer"
   });
   c.AddSecurityRequirement(new OpenApiSecurityRequirement

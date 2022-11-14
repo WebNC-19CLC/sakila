@@ -362,5 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-bin/ 	# ignore bin directory 
+sakilaAppMySQL/bin/ 	# ignore bin directory 
 *.obj 	# ignore any files with .obj postfix 
+sakilaAppMySQL/obj/
+*.dll
+.vs/
