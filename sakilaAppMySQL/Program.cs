@@ -75,30 +75,29 @@ builder.Services.AddSwaggerGen(c =>
   c.ExampleFilters();
   var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
   c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-  c.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
   {
-    Name = "Authorization",
-    Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
     In = ParameterLocation.Header,
-    Type = SecuritySchemeType.Http,
-    Scheme = "Bearer"
+    Description = "Please enter token",
+    Name = "Authorization",
+    Type = SecuritySchemeType.ApiKey,
+    BearerFormat = "JWT",
+    Scheme = "bearer"
   });
   c.AddSecurityRequirement(new OpenApiSecurityRequirement
-{
     {
-        new OpenApiSecurityScheme
         {
-            Name = "Bearer",
-            In = ParameterLocation.Header,
-            Reference = new OpenApiReference
+            new OpenApiSecurityScheme
             {
-                Id = "Bearer",
-                Type = ReferenceType.SecurityScheme
-            }
-        },
-        new List<string>()
-    }
-});
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
@@ -121,6 +120,7 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
