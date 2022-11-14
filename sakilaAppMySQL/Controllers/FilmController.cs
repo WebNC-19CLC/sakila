@@ -16,10 +16,13 @@ namespace sakilaAppMySQL.Controllers
   {
     private readonly IMapper _mapper;
     private readonly IFilmService _service;
-    public FilmController(IMapper mapper, IFilmService service)
+    private readonly ILogger<FilmController> _logger;
+
+    public FilmController(ILogger<FilmController> logger, IMapper mapper, IFilmService service)
     {
       _mapper = mapper;
       _service = service;
+      _logger = logger;
     }
     [HttpGet()]
     [SwaggerResponseExample(200, typeof(FilmsExample))]

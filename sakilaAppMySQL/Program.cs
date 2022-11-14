@@ -8,6 +8,7 @@ using sakilaAppMySQL.Infrastructure.Domain.Entities.Authentication;
 using sakilaAppMySQL.Infrastructure.Domain.Object.Configuration;
 using sakilaAppMySQL.Infrastructure.Services;
 using sakilaAppMySQL.Middlewares;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
@@ -101,6 +102,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
+
+var configSettings = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configSettings)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

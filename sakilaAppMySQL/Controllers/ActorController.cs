@@ -18,10 +18,13 @@ namespace sakilaAppMySQL.Controllers
   {
     private readonly IMapper _mapper;
     private readonly IActorService _service;
-    public ActorController(IMapper mapper, IActorService service)
+    private readonly ILogger<ActorController> _logger;
+
+    public ActorController(ILogger<ActorController> logger, IMapper mapper, IActorService service)
     {
       _mapper = mapper;
       _service = service;
+      _logger = logger;
     }
     /// <summary>
     /// Get all actors
@@ -43,7 +46,8 @@ namespace sakilaAppMySQL.Controllers
     [HttpPost()]
     [SwaggerResponseExample(200, typeof(ActorExample))]
     [SwaggerRequestExample(typeof(CreateActorDto), typeof(CreateActorRequestExample))]
-    public ActorDto CreateActor([FromBody] CreateActorDto actor) {
+    public ActorDto CreateActor([FromBody] CreateActorDto actor)
+    {
       return _service.Create(actor);
     }
 
@@ -59,11 +63,11 @@ namespace sakilaAppMySQL.Controllers
       return _mapper.Map<Actor, ActorDto>(_service.GetOne(Id));
     }
 
-   /// <summary>
-   /// Get actor by page
-   /// </summary>
-   /// <param name="filter"></param>
-   /// <returns></returns>
+    /// <summary>
+    /// Get actor by page
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <returns></returns>
     [HttpPost("searchByPage")]
     [SwaggerResponseExample(200, typeof(ActorExample))]
     [SwaggerRequestExample(typeof(SearchFilterDto), typeof(SearchFilterExample))]
@@ -78,7 +82,8 @@ namespace sakilaAppMySQL.Controllers
     /// <param name="Id">Id of an actor</param>
     /// <response code="404">Actor not found</response>
     [HttpDelete()]
-    public void Delte(int Id) { 
+    public void Delte(int Id)
+    {
       _service.Delete(Id);
     }
   }

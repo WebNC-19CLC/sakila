@@ -18,8 +18,10 @@ namespace sakilaAppMySQL.Controllers
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthenticateController> _logger;
 
     public AuthenticateController(
+      ILogger<AuthenticateController> logger,
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IConfiguration configuration)
@@ -27,6 +29,7 @@ namespace sakilaAppMySQL.Controllers
       _userManager = userManager;
       _roleManager = roleManager;
       _configuration = configuration;
+      _logger = logger;
     }
 
     [HttpPost]
