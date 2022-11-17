@@ -113,8 +113,17 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+//Enable CORS
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+  builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
+
+
 var app = builder.Build();
 
+app.UseCors("corsapp");
 
 
 // Configure the HTTP request pipeline.
