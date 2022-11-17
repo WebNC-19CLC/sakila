@@ -36,6 +36,7 @@ namespace sakilaAppMySQL.Controllers
     [SwaggerRequestExample(typeof(SearchFilmFilterDto), typeof(SearchFilterExample))]
     public IEnumerable<FilmDto> SearchByPage([FromBody] SearchFilmFilterDto filter)
     {
+      _logger.LogInformation("Get film page");
       return _mapper.Map<IEnumerable<Film>, IEnumerable<FilmDto>>(_service.SearchByPage(filter));
     }
    

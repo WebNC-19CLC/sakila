@@ -59,7 +59,7 @@ namespace sakilaAppMySQL.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 01, 01, 0, 0, 0, 0, DateTimeKind.Utc);
-            string requestTimeStamp = Convert.ToUInt64(timeSpan.TotalSeconds).ToString();
+            string requestTimeStamp = Convert.ToUInt64(timeSpan.TotalMinutes).ToString();
 
             String authenticationDataString = (String.Format("{0}{1}", uri, requestTimeStamp));
 

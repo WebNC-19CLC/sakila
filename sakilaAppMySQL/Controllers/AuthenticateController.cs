@@ -62,6 +62,10 @@ namespace sakilaAppMySQL.Controllers
 
         await _userManager.UpdateAsync(user);
 
+        Response.Cookies.Append("X-Access-Token", new JwtSecurityTokenHandler().WriteToken(token), new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+        Response.Cookies.Append("X-Username", user.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+        Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+
         return Ok(new
         {
           Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -69,6 +73,7 @@ namespace sakilaAppMySQL.Controllers
           Expiration = token.ValidTo
         });
       }
+
       return Unauthorized();
     }
 
@@ -163,6 +168,10 @@ namespace sakilaAppMySQL.Controllers
 
       user.RefreshToken = newRefreshToken;
       await _userManager.UpdateAsync(user);
+
+      Response.Cookies.Append("X-Access-Token", new JwtSecurityTokenHandler().WriteToken(newAccessToken), new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Username", user.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
       return new ObjectResult(new
       {
