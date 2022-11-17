@@ -9,9 +9,11 @@ using System;
 using System.Security.Policy;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sakilaAppMySQL.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("serverb/api")]
     public class ServerBController : ControllerBase
@@ -47,7 +49,7 @@ namespace sakilaAppMySQL.Controllers
                 return Ok(weatherForecasts);
             }
         }
-
+        [NonAction]
         public HttpClient RequestHandler(string host, string uri)
         {
             var client = new HttpClient();
