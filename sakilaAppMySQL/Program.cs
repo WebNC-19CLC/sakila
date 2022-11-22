@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using sakilaAppMySQL.Hubs;
 using sakilaAppMySQL.Infrastructure.Context;
 using sakilaAppMySQL.Infrastructure.Domain.Entities.Authentication;
 using sakilaAppMySQL.Infrastructure.Domain.Object.Configuration;
@@ -23,6 +25,7 @@ ConfigurationManager configuration = builder.Configuration;
 var appSettings = appSettingsSection.Get<AppSettings>();
 
 //SERVICES
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IActorService, ActorService>();
 builder.Services.AddScoped<IFilmService, FilmService>();
 
@@ -42,11 +45,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
 {
-  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultAuthenticateScheme = "JWT_OR_COOKIE";
+  options.DefaultChallengeScheme = "JWT_OR_COOKIE";
+  options.DefaultScheme = "JWT_OR_COOKIE";
 })
-
+.AddCookie("Cookies", options =>
+{
+  options.LoginPath = "/api/Authenticate/login";
+  options.ExpireTimeSpan = TimeSpan.FromDays(1);
+})
 // Adding Jwt Bearer
 .AddJwtBearer(options =>
 {
@@ -63,6 +70,20 @@ builder.Services.AddAuthentication(options =>
     ValidAudience = configuration["JWT:ValidAudience"],
     ValidIssuer = configuration["JWT:ValidIssuer"],
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+  };
+})
+.AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
+{
+  // runs on each request
+  options.ForwardDefaultSelector = context =>
+  {
+    // filter by auth type
+    string authorization = context.Request.Headers[HeaderNames.Authorization];
+    if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
+      return "Bearer";
+
+    // otherwise always check for cookie auth
+    return "Cookies";
   };
 });
 
@@ -116,7 +137,7 @@ builder.Host.UseSerilog();
 //Enable CORS
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
-  builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+  builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed((hosts) => true);
 }));
 
 
@@ -124,7 +145,6 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 var app = builder.Build();
 
 app.UseCors("corsapp");
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -140,8 +160,16 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+  endpoints.MapControllers();
+  endpoints.MapHub<MessageHub>("notification");
+});
 
 app.MapControllers();
 

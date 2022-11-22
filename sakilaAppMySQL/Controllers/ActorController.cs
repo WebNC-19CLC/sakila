@@ -8,10 +8,11 @@ using sakilaAppMySQL.Swagger.Actor;
 using sakilaAppMySQL.Dtos.Common;
 using sakilaAppMySQL.Swagger.Common;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using sakilaAppMySQL.Hubs;
 
 namespace sakilaAppMySQL.Controllers
 {
-  [Authorize]
   [ApiController]
   [Route("[controller]")]
   public class ActorController : ControllerBase
@@ -19,12 +20,14 @@ namespace sakilaAppMySQL.Controllers
     private readonly IMapper _mapper;
     private readonly IActorService _service;
     private readonly ILogger<ActorController> _logger;
+    private IHubContext<MessageHub, IMessageHubClient> _messageHub;
 
-    public ActorController(ILogger<ActorController> logger, IMapper mapper, IActorService service)
+    public ActorController(ILogger<ActorController> logger, IMapper mapper, IActorService service, IHubContext<MessageHub, IMessageHubClient> messageHub)
     {
       _mapper = mapper;
       _service = service;
       _logger = logger;
+      _messageHub = messageHub;
     }
     /// <summary>
     /// Get all actors
@@ -48,6 +51,7 @@ namespace sakilaAppMySQL.Controllers
     [SwaggerRequestExample(typeof(CreateActorDto), typeof(CreateActorRequestExample))]
     public ActorDto CreateActor([FromBody] CreateActorDto actor)
     {
+      _messageHub.Clients.All.SendNotificationToUsers("Created actor");
       return _service.Create(actor);
     }
 

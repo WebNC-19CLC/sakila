@@ -241,7 +241,7 @@ namespace sakilaAppMySQL.Controllers
         ValidateIssuer = false,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
-        ValidateLifetime = true
+        ValidateLifetime = false
       };
 
       var tokenHandler = new JwtSecurityTokenHandler();
