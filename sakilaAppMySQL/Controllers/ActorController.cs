@@ -49,10 +49,11 @@ namespace sakilaAppMySQL.Controllers
     [HttpPost()]
     [SwaggerResponseExample(200, typeof(ActorExample))]
     [SwaggerRequestExample(typeof(CreateActorDto), typeof(CreateActorRequestExample))]
-    public ActorDto CreateActor([FromBody] CreateActorDto actor)
+    public async Task<ActorDto> CreateActor([FromBody] CreateActorDto actor)
     {
-      _messageHub.Clients.All.SendNotificationToUsers("Created actor");
-      return _service.Create(actor);
+      var result = _service.Create(actor);
+      await _messageHub.Clients.Group("Notification").SendNotificationAddActorToUsers(result);
+      return result;
     }
 
     /// <summary>
@@ -89,6 +90,7 @@ namespace sakilaAppMySQL.Controllers
     public void Delte(int Id)
     {
       _service.Delete(Id);
+      _messageHub.Clients.Group("Notification").SendNotificationDeleteActorToUsers(Id);
     }
   }
 }
